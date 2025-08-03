@@ -75,8 +75,8 @@ def generate_sri_lanka_sample_data():
         
         bedrooms = max(1, int(house_size / 600))  # Approx 600 sqft per bedroom
         bathrooms = max(1, min(bedrooms, int(house_size / 800)))
-        parking = np.random.randint(0, min(4, int(land_size / 5)))
-        age_years = np.random.exponential(15)  # Most houses are relatively new
+        parking = np.random.randint(0, max(1, min(4, int(land_size / 5))))
+        age_years = max(0, np.random.exponential(15))  # Most houses are relatively new
         amenities_score = np.random.randint(1, 11)
         proximity_colombo = max(0, np.random.normal(50, 30))
         school_rating = np.random.randint(1, 11)
