@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - Boston Housing Price Prediction</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-home"></i> Boston Housing Price Predictor</h1>
+            <p class="subtitle">About the Model and Features</p>
+        </header>
+
+        <nav class="navigation">
+            <a href="{{ url_for('home') }}" class="nav-link"><i class="fas fa-calculator"></i> Predict</a>
+            <a href="{{ url_for('sample_data') }}" class="nav-link"><i class="fas fa-flask"></i> Sample Data</a>
+            <a href="{{ url_for('about') }}" class="nav-link active"><i class="fas fa-info-circle"></i> About</a>
+        </nav>
+
+        <div class="main-content">
+            <div class="about-section">
+                <h2><i class="fas fa-brain"></i> About the Model</h2>
+                <p>This application uses a machine learning model trained on the famous Boston Housing dataset to predict house prices. The model takes into account 13 different features that influence housing prices in the Boston area.</p>
+
+                <h2><i class="fas fa-list-ul"></i> Feature Descriptions</h2>
+                <div class="features-list">
+                    {% for feature, info in feature_info.items() %}
+                    <div class="feature-card">
+                        <h3>{{ feature }}</h3>
+                        <p><strong>Description:</strong> {{ info.description }}</p>
+                        <p><strong>Valid Range:</strong> {{ info.min }} - {{ info.max }}</p>
+                        <p><strong>Default Value:</strong> {{ info.default }}</p>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <h2><i class="fas fa-chart-bar"></i> Model Information</h2>
+                <div class="model-info">
+                    <div class="info-card">
+                        <h3>Algorithm</h3>
+                        <p>Linear Regression</p>
+                    </div>
+                    <div class="info-card">
+                        <h3>Dataset</h3>
+                        <p>Boston Housing Dataset (1970s)</p>
+                    </div>
+                    <div class="info-card">
+                        <h3>Features</h3>
+                        <p>13 numerical features</p>
+                    </div>
+                    <div class="info-card">
+                        <h3>Target</h3>
+                        <p>Median home value (in $1000s)</p>
+                    </div>
+                </div>
+
+                <h2><i class="fas fa-exclamation-triangle"></i> Important Notes</h2>
+                <div class="notes">
+                    <ul>
+                        <li>This model is based on historical data from the 1970s Boston area</li>
+                        <li>Predictions are estimates and should not be used for actual real estate decisions</li>
+                        <li>The model assumes linear relationships between features and house prices</li>
+                        <li>All input values must be within the specified ranges for accurate predictions</li>
+                    </ul>
+                </div>
+
+                <h2><i class="fas fa-rocket"></i> How to Use</h2>
+                <div class="usage-guide">
+                    <ol>
+                        <li>Navigate to the <strong>Predict</strong> page</li>
+                        <li>Fill in all 13 feature values (or use sample data)</li>
+                        <li>Click <strong>Predict Price</strong> to get the estimated house value</li>
+                        <li>Review the detailed prediction results</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>&copy; 2025 Boston Housing Price Predictor. Built with Flask and scikit-learn.</p>
+        </footer>
+    </div>
+</body>
+</html>
