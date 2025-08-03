@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compare Locations - Sri Lankan Housing</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style_sl.css') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-home"></i> 🇱🇰 Sri Lankan Housing Price Predictor</h1>
+            <p class="subtitle">Compare prices across different locations in Sri Lanka</p>
+        </header>
+
+        <nav class="navigation">
+            <a href="{{ url_for('home') }}" class="nav-link"><i class="fas fa-calculator"></i> Predict</a>
+            <a href="{{ url_for('sample_data') }}" class="nav-link"><i class="fas fa-flask"></i> Sample Data</a>
+            <a href="{{ url_for('compare') }}" class="nav-link active"><i class="fas fa-chart-bar"></i> Compare Locations</a>
+            <a href="{{ url_for('data_insights') }}" class="nav-link"><i class="fas fa-chart-line"></i> Market Insights</a>
+            <a href="{{ url_for('about') }}" class="nav-link"><i class="fas fa-info-circle"></i> About</a>
+        </nav>
+
+        <div class="main-content">
+            <div class="compare-section">
+                <h2><i class="fas fa-chart-bar"></i> Location Price Comparison</h2>
+                
+                <div class="comparison-tool">
+                    <div class="property-inputs">
+                        <h3>Standard Property Details</h3>
+                        <div class="input-grid">
+                            <div class="input-group">
+                                <label>Land Size (perches):</label>
+                                <input type="number" id="landSize" value="15" min="1" max="500">
+                            </div>
+                            <div class="input-group">
+                                <label>House Size (sqft):</label>
+                                <input type="number" id="houseSize" value="2000" min="500" max="10000">
+                            </div>
+                            <div class="input-group">
+                                <label>Bedrooms:</label>
+                                <input type="number" id="bedrooms" value="3" min="1" max="8">
+                            </div>
+                            <div class="input-group">
+                                <label>Bathrooms:</label>
+                                <input type="number" id="bathrooms" value="2" min="1" max="6">
+                            </div>
+                            <div class="input-group">
+                                <label>Age (years):</label>
+                                <input type="number" id="ageYears" value="5" min="0" max="100">
+                            </div>
+                            <div class="input-group">
+                                <label>Amenities Score (1-10):</label>
+                                <input type="number" id="amenitiesScore" value="6" min="1" max="10">
+                            </div>
+                        </div>
+                        <button onclick="compareLocations()" class="btn btn-primary">
+                            <i class="fas fa-chart-bar"></i> Compare Prices
+                        </button>
+                    </div>
+
+                    <div class="comparison-results" id="comparisonResults" style="display: none;">
+                        <h3>Price Comparison Results</h3>
+                        <div class="results-grid" id="resultsGrid">
+                            <!-- Results will be inserted here -->
+                        </div>
+                    </div>
+                </div>
+
+                <div class="location-guide">
+                    <h3><i class="fas fa-map-marker-alt"></i> Location Score Guide</h3>
+                    <div class="location-cards">
+                        {% for location, score in location_mappings.items() %}
+                        <div class="location-card" data-score="{{ score }}">
+                            <h4>{{ location }}</h4>
+                            <div class="score">{{ score }}/10</div>
+                            <div class="description">
+                                {% if score >= 9 %}
+                                Premium urban area with excellent infrastructure
+                                {% elif score >= 7 %}
+                                Well-developed area with good amenities
+                                {% elif score >= 5 %}
+                                Developing area with moderate facilities
+                                {% else %}
+                                Rural or developing area
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="market-insights">
+                    <h3><i class="fas fa-lightbulb"></i> Market Insights</h3>
+                    <div class="insights-grid">
+                        <div class="insight-card">
+                            <h4>Colombo Premium</h4>
+                            <p>Properties in Colombo command a 100-200% premium over rural areas due to business opportunities and infrastructure.</p>
+                        </div>
+                        <div class="insight-card">
+                            <h4>Proximity Effect</h4>
+                            <p>Every 10km closer to Colombo can increase property value by 15-25% in suburban areas.</p>
+                        </div>
+                        <div class="insight-card">
+                            <h4>Land vs. House</h4>
+                            <p>In urban areas, land value contributes 60-70% of total property value, while house improvements contribute 30-40%.</p>
+                        </div>
+                        <div class="insight-card">
+                            <h4>Investment Zones</h4>
+                            <p>Gampaha and Kandy offer the best balance of accessibility and affordability for investment.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>&copy; 2025 Sri Lankan Housing Price Predictor. Compare and analyze property values across Sri Lanka.</p>
+        </footer>
+    </div>
+
+    <script>
+        async function compareLocations() {
+            const results = document.getElementById('comparisonResults');
+            const resultsGrid = document.getElementById('resultsGrid');
+            
+            // Get base property details
+            const baseProperty = {
+                LAND_SIZE: parseFloat(document.getElementById('landSize').value),
+                HOUSE_SIZE: parseFloat(document.getElementById('houseSize').value),
+                BEDROOMS: parseInt(document.getElementById('bedrooms').value),
+                BATHROOMS: parseInt(document.getElementById('bathrooms').value),
+                AGE_YEARS: parseFloat(document.getElementById('ageYears').value),
+                AMENITIES_SCORE: parseInt(document.getElementById('amenitiesScore').value),
+                PARKING: 2,
+                SCHOOL_RATING: 6,
+                TRANSPORT_ACCESS: 7,
+                COMMERCIAL_ACCESS: 6,
+                SECURITY_LEVEL: 7
+            };
+
+            const locations = {
+                'Colombo': 10, 'Mount Lavinia': 9, 'Dehiwala': 9, 'Moratuwa': 8.5,
+                'Gampaha': 8, 'Negombo': 7.5, 'Kelaniya': 8, 'Kadawatha': 7.5,
+                'Kandy': 7, 'Peradeniya': 6.5, 'Galle': 6, 'Matara': 5.5,
+                'Jaffna': 5, 'Trincomalee': 4.5, 'Batticaloa': 4, 'Anuradhapura': 4,
+                'Polonnaruwa': 3.5, 'Ratnapura': 4.5, 'Kegalle': 4.5, 'Kurunegala': 5,
+                'Puttalam': 4, 'Hambantota': 4, 'Monaragala': 3, 'Badulla': 4.5,
+                'Nuwara Eliya': 5.5
+            };
+            const comparisons = [];
+
+            // Calculate prices for different locations
+            for (const [locationName, score] of Object.entries(locations)) {
+                const property = { ...baseProperty };
+                property.LOCATION_SCORE = score;
+                
+                // Adjust proximity based on location
+                if (score >= 9) property.PROXIMITY_COLOMBO = 5;
+                else if (score >= 8) property.PROXIMITY_COLOMBO = 20;
+                else if (score >= 7) property.PROXIMITY_COLOMBO = 50;
+                else if (score >= 5) property.PROXIMITY_COLOMBO = 100;
+                else property.PROXIMITY_COLOMBO = 200;
+
+                // Adjust other factors based on location score
+                property.TRANSPORT_ACCESS = Math.min(10, score + 1);
+                property.COMMERCIAL_ACCESS = Math.min(10, score);
+                property.SECURITY_LEVEL = Math.min(10, score + 1);
+
+                try {
+                    const response = await fetch('/api/predict', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(property)
+                    });
+
+                    if (response.ok) {
+                        const data = await response.json();
+                        comparisons.push({
+                            location: locationName,
+                            score: score,
+                            price_lkr: data.prediction_lkr,
+                            price_usd: data.prediction_usd,
+                            price_per_sqft: Math.round(data.prediction_lkr / property.HOUSE_SIZE),
+                            price_per_perch: Math.round(data.prediction_lkr / property.LAND_SIZE)
+                        });
+                    }
+                } catch (error) {
+                    console.error('Error predicting for', locationName, error);
+                }
+            }
+
+            // Sort by price (highest first)
+            comparisons.sort((a, b) => b.price_lkr - a.price_lkr);
+
+            // Display results
+            resultsGrid.innerHTML = comparisons.map((comp, index) => `
+                <div class="result-card ${index === 0 ? 'highest' : index === comparisons.length - 1 ? 'lowest' : ''}">
+                    <h4>${comp.location}</h4>
+                    <div class="price-main">LKR ${comp.price_lkr.toLocaleString()}</div>
+                    <div class="price-usd">≈ USD ${comp.price_usd.toLocaleString()}</div>
+                    <div class="metrics">
+                        <div>Per sqft: LKR ${comp.price_per_sqft.toLocaleString()}</div>
+                        <div>Per perch: LKR ${comp.price_per_perch.toLocaleString()}</div>
+                    </div>
+                    <div class="location-score">Score: ${comp.score}/10</div>
+                </div>
+            `).join('');
+
+            results.style.display = 'block';
+        }
+
+        // Initialize with a default comparison
+        window.onload = function() {
+            setTimeout(compareLocations, 1000);
+        };
+    </script>
+
+    <style>
+        .compare-section {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .property-inputs {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        .input-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .input-group label {
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #555;
+        }
+
+        .input-group input {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+
+        .result-card {
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid #e1e5e9;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .result-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .result-card.highest {
+            border-color: #ff6b35;
+            background: linear-gradient(135deg, #fff5f0 0%, #ffe8e1 100%);
+        }
+
+        .result-card.lowest {
+            border-color: #4f7942;
+            background: linear-gradient(135deg, #f0f8f0 0%, #e8f4e8 100%);
+        }
+
+        .price-main {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #333;
+            margin: 10px 0;
+        }
+
+        .price-usd {
+            color: #666;
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+        }
+
+        .metrics {
+            font-size: 0.9rem;
+            color: #555;
+            margin: 10px 0;
+        }
+
+        .location-score {
+            font-weight: bold;
+            color: #ff6b35;
+        }
+
+        .location-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .location-card {
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+            text-align: center;
+            background: white;
+        }
+
+        .location-card .score {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #ff6b35;
+            margin: 10px 0;
+        }
+
+        .location-card .description {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .insights-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .insight-card {
+            padding: 20px;
+            background: #f0f8ff;
+            border-radius: 10px;
+            border-left: 4px solid #1e3a8a;
+        }
+
+        .insight-card h4 {
+            color: #1e3a8a;
+            margin-bottom: 10px;
+        }
+    </style>
+</body>
+</html>
