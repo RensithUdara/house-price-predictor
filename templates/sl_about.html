@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - Sri Lankan Housing Price Prediction</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style_sl.css') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-home"></i> 🇱🇰 Sri Lankan Housing Price Predictor</h1>
+            <p class="subtitle">About the Sri Lankan Model and Features</p>
+        </header>
+
+        <nav class="navigation">
+            <a href="{{ url_for('home') }}" class="nav-link"><i class="fas fa-calculator"></i> Predict</a>
+            <a href="{{ url_for('sample_data') }}" class="nav-link"><i class="fas fa-flask"></i> Sample Data</a>
+            <a href="{{ url_for('compare') }}" class="nav-link"><i class="fas fa-chart-bar"></i> Compare Locations</a>
+            <a href="{{ url_for('data_insights') }}" class="nav-link"><i class="fas fa-chart-line"></i> Market Insights</a>
+            <a href="{{ url_for('about') }}" class="nav-link active"><i class="fas fa-info-circle"></i> About</a>
+        </nav>
+
+        <div class="main-content">
+            <div class="about-section">
+                <h2><i class="fas fa-brain"></i> About the Sri Lankan Housing Model</h2>
+                <p>This application uses a machine learning model specifically designed for the Sri Lankan real estate market. Unlike the Boston Housing model, this predictor takes into account local factors that significantly influence property prices in Sri Lanka, including proximity to Colombo, local amenities, and regional characteristics.</p>
+
+                <h2><i class="fas fa-flag"></i> Why Sri Lanka-Specific?</h2>
+                <div class="comparison-grid">
+                    <div class="comparison-card">
+                        <h3>Boston Model Issues</h3>
+                        <ul>
+                            <li>Based on 1970s US data</li>
+                            <li>Different currency (USD vs LKR)</li>
+                            <li>Different market dynamics</li>
+                            <li>Irrelevant features (Charles River, etc.)</li>
+                            <li>Different urban planning</li>
+                        </ul>
+                    </div>
+                    <div class="comparison-card">
+                        <h3>Sri Lankan Model Benefits</h3>
+                        <ul>
+                            <li>Current market conditions</li>
+                            <li>LKR currency predictions</li>
+                            <li>Local factors (proximity to Colombo)</li>
+                            <li>Relevant features (land size in perches)</li>
+                            <li>Sri Lankan urban structure</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h2><i class="fas fa-list-ul"></i> Feature Descriptions</h2>
+                <div class="features-list">
+                    {% for feature, info in feature_info.items() %}
+                    <div class="feature-card">
+                        <h3>{{ feature.replace('_', ' ').title() }}</h3>
+                        <p><strong>Description:</strong> {{ info.description }}</p>
+                        <p><strong>Valid Range:</strong> {{ info.min }} - {{ info.max }}</p>
+                        <p><strong>Default Value:</strong> {{ info.default }}</p>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <h2><i class="fas fa-map-marker-alt"></i> Location Score Guide</h2>
+                <div class="location-mappings">
+                    <div class="mapping-grid">
+                        {% for location, score in location_mappings.items() %}
+                        <div class="mapping-item">
+                            <span class="location-name">{{ location }}</span>
+                            <span class="location-score">{{ score }}</span>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <h2><i class="fas fa-chart-bar"></i> Model Information</h2>
+                <div class="model-info">
+                    <div class="info-card">
+                        <h3>Algorithm</h3>
+                        <p>Random Forest Regressor</p>
+                        <small>Better for non-linear relationships</small>
+                    </div>
+                    <div class="info-card">
+                        <h3>Dataset</h3>
+                        <p>Synthetic Sri Lankan Data</p>
+                        <small>1000 samples, realistic features</small>
+                    </div>
+                    <div class="info-card">
+                        <h3>Features</h3>
+                        <p>13 Sri Lankan-specific features</p>
+                        <small>Locally relevant factors</small>
+                    </div>
+                    <div class="info-card">
+                        <h3>Currency</h3>
+                        <p>Sri Lankan Rupees (LKR)</p>
+                        <small>With USD conversion</small>
+                    </div>
+                </div>
+
+                <h2><i class="fas fa-money-bill-wave"></i> Pricing Factors</h2>
+                <div class="pricing-factors">
+                    <div class="factor-card">
+                        <h3><i class="fas fa-map-pin"></i> Location Premium</h3>
+                        <p>Colombo and surrounding areas command premium prices due to business centers, amenities, and infrastructure.</p>
+                    </div>
+                    <div class="factor-card">
+                        <h3><i class="fas fa-ruler-combined"></i> Land Value</h3>
+                        <p>Land size in perches is crucial. Urban areas have smaller plots but higher per-perch values.</p>
+                    </div>
+                    <div class="factor-card">
+                        <h3><i class="fas fa-home"></i> House Features</h3>
+                        <p>Modern amenities, parking, and house size significantly impact valuation.</p>
+                    </div>
+                    <div class="factor-card">
+                        <h3><i class="fas fa-school"></i> Infrastructure</h3>
+                        <p>Proximity to good schools, transport, and commercial centers adds value.</p>
+                    </div>
+                </div>
+
+                <h2><i class="fas fa-exclamation-triangle"></i> Important Notes</h2>
+                <div class="notes">
+                    <ul>
+                        <li><strong>Synthetic Data:</strong> This model uses realistic but generated data based on Sri Lankan market patterns</li>
+                        <li><strong>Currency:</strong> Predictions are in Sri Lankan Rupees (LKR) with USD approximations</li>
+                        <li><strong>Market Dynamics:</strong> Considers current Sri Lankan real estate factors</li>
+                        <li><strong>Regional Variations:</strong> Location scores reflect actual market premiums across districts</li>
+                        <li><strong>Use Case:</strong> Educational and demonstration purposes - not for actual investment decisions</li>
+                    </ul>
+                </div>
+
+                <h2><i class="fas fa-rocket"></i> How to Use</h2>
+                <div class="usage-guide">
+                    <ol>
+                        <li>Navigate to the <strong>Predict</strong> page</li>
+                        <li>Select the appropriate location score for your area</li>
+                        <li>Enter property details in Sri Lankan context (perches, sqft, etc.)</li>
+                        <li>Rate amenities and access to facilities</li>
+                        <li>Get predictions in both LKR and USD</li>
+                        <li>Compare different scenarios using the comparison tool</li>
+                    </ol>
+                </div>
+
+                <h2><i class="fas fa-database"></i> Data Sources & Methodology</h2>
+                <div class="methodology">
+                    <p>The Sri Lankan housing model was created using:</p>
+                    <ul>
+                        <li><strong>Market Research:</strong> Analysis of Sri Lankan real estate trends</li>
+                        <li><strong>Geographic Data:</strong> District-wise pricing patterns</li>
+                        <li><strong>Feature Engineering:</strong> Local factors like proximity to Colombo</li>
+                        <li><strong>Correlation Analysis:</strong> Relationships between features and prices</li>
+                        <li><strong>Random Forest Model:</strong> Captures non-linear market dynamics</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>&copy; 2025 Sri Lankan Housing Price Predictor. Built with Flask, scikit-learn, and local market insights.</p>
+        </footer>
+    </div>
+
+    <style>
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .comparison-card {
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .comparison-card:first-child {
+            background: #ffebee;
+            border-left: 4px solid #f44336;
+        }
+
+        .comparison-card:last-child {
+            background: #e8f5e8;
+            border-left: 4px solid #4caf50;
+        }
+
+        .mapping-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .mapping-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 15px;
+            background: white;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+
+        .location-name {
+            font-weight: 600;
+        }
+
+        .location-score {
+            color: #ff6b35;
+            font-weight: bold;
+        }
+
+        .pricing-factors {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .factor-card {
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid #ff6b35;
+        }
+
+        .factor-card h3 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .methodology {
+            background: #f0f8ff;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #1e3a8a;
+        }
+
+        @media (max-width: 768px) {
+            .comparison-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .mapping-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</body>
+</html>
